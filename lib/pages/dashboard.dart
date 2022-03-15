@@ -1,5 +1,6 @@
 import 'package:cloud_data/model/usermodel.dart';
 import 'package:cloud_data/pages/create_data_page.dart';
+import 'package:cloud_data/pages/update_data_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -41,53 +42,60 @@ class _DashboardState extends State<Dashboard> {
               );
             } else {
               return ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return Slidable(
-                      startActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: <Widget>[
-                          SlidableAction(
-                            onPressed: (a) {
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) => const UpdateData(),
-                              //   ),
-                              // );
-                              Fluttertoast.showToast(msg: "Data Updated");
-                            },
-                            backgroundColor: const Color(0xFF21B7CA),
-                            foregroundColor: Colors.white,
-                            icon: Icons.edit,
-                            label: 'Edit',
-                          ),
-                        ],
-                      ),
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (a) {
-                              daleteData('users', data[index].id);
-                            },
-                            backgroundColor: Colors.redAccent,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          ),
-                        ],
-                      ),
-                      child: Card(
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            child: Text(data[index]["avatar"]),
-                          ),
-                          title: Text(data[index]["name"]),
-                          subtitle: Text(data[index]["email"]),
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Slidable(
+                    startActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: <Widget>[
+                        SlidableAction(
+                          onPressed: (a) {
+                            String name = data[index]["name"];
+                            String email = data[index]["email"];
+                            String dataIndex = data[index].id;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => UpdateData(
+                                  previousName: name,
+                                  previousEmail: email,
+                                  currentIndex: dataIndex,
+                                ),
+                              ),
+                            );
+                          },
+                          backgroundColor: const Color(0xFF21B7CA),
+                          foregroundColor: Colors.white,
+                          icon: Icons.edit,
+                          label: 'Edit',
                         ),
+                      ],
+                    ),
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (a) {
+                            daleteData('users', data[index].id);
+                          },
+                          backgroundColor: Colors.redAccent,
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: 'Delete',
+                        ),
+                      ],
+                    ),
+                    child: Card(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          child: Text(data[index]["avatar"] ?? "UserName"),
+                        ),
+                        title: Text(data[index]["name"] ?? "User E-Mail"),
+                        subtitle: Text(data[index]["email"] ?? ""),
                       ),
-                    );
-                  });
+                    ),
+                  );
+                },
+              );
             }
           },
         ),
