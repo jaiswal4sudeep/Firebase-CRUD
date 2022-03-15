@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:cloud_data/model/usermodel.dart';
 import 'package:cloud_data/pages/create_data_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

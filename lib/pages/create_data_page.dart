@@ -1,5 +1,3 @@
-// import 'package:cloud_data/pages/Image%20Pick/profilepicture.dart';
-
 import 'package:cloud_data/model/usermodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
