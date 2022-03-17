@@ -1,28 +1,35 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UpdateData extends StatelessWidget {
+class UpdateData extends HookConsumerWidget {
   final previousName;
   final previousEmail;
   final currentIndex;
+  final previousAvatar;
   const UpdateData(
-      {Key? key, this.previousName, this.previousEmail, this.currentIndex})
+      {Key? key,
+      this.previousName,
+      this.previousEmail,
+      this.currentIndex,
+      this.previousAvatar})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     TextEditingController _fullName = TextEditingController();
     TextEditingController _email = TextEditingController();
+    final _avatar = useState<String>(previousAvatar);
     final _formKey = GlobalKey<FormState>();
 
     _fullName.text = previousName;
     _email.text = previousEmail;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update Profile'),
+        title: const Text('Update User Data'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -34,6 +41,40 @@ class UpdateData extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 80,
+                    child: Text(
+                      _avatar.value,
+                      style: const TextStyle(
+                        fontSize: 48,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 5,
+                    right: 5,
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.blueAccent,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.camera_alt,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Form(
               key: _formKey,
               child: Column(
@@ -61,6 +102,7 @@ class UpdateData extends StatelessWidget {
                         if (value!.isEmpty) {
                           return "Username cannot be empty";
                         }
+                        _avatar.value = _fullName.text.substring(0, 1);
                         return null;
                       },
                     ),
@@ -107,11 +149,12 @@ class UpdateData extends StatelessWidget {
                               {
                                 'name': _fullName.text,
                                 'email': _email.text,
+                                'avatar': _avatar.value.toUpperCase(),
                               },
                             )
                             .then(
                               (value) =>
-                                  Fluttertoast.showToast(msg: "Profile Updated")
+                                  Fluttertoast.showToast(msg: "Data Updated")
                                       .then(
                                 (value) => Navigator.of(context).pop(),
                               ),
@@ -134,3 +177,7 @@ class UpdateData extends StatelessWidget {
     );
   }
 }
+
+// void updateFields() async{
+//   await FirebaseFirestore.instance.collection("users").doc(docName).update({'name' : })
+// }

@@ -1,15 +1,17 @@
-import 'package:cloud_data/model/usermodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CreateData extends StatelessWidget {
+class CreateData extends HookConsumerWidget {
   const CreateData({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     TextEditingController _fullName = TextEditingController();
     TextEditingController _email = TextEditingController();
+    final _avatar = useState<String>("*");
     final _formKey = GlobalKey<FormState>();
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     return Scaffold(
@@ -26,6 +28,40 @@ class CreateData extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 80,
+                    child: Text(
+                      _avatar.value,
+                      style: const TextStyle(
+                        fontSize: 48,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 5,
+                    right: 5,
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.blueAccent,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.camera_alt,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Form(
               key: _formKey,
               child: Column(
@@ -53,6 +89,7 @@ class CreateData extends StatelessWidget {
                         if (value!.isEmpty) {
                           return "Username cannot be empty";
                         }
+                        _avatar.value = _fullName.text.substring(0, 1);
                         return null;
                       },
                     ),
@@ -92,18 +129,15 @@ class CreateData extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        UserModel userModel = UserModel();
-                        userModel.name = _fullName.text;
-                        userModel.email = _email.text;
-                        userModel.avatar = _fullName.text.substring(0, 1);
-                        await firebaseFirestore
-                            .collection("users")
-                            .add(
-                              userModel.toMap(),
-                            )
-                            .then(
-                              (value) => Fluttertoast.showToast(
-                                      msg: "Profile Created!")
+                        await firebaseFirestore.collection("users").add(
+                          {
+                            'name': _fullName.text,
+                            'email': _email.text,
+                            'avatar': _avatar.value.toUpperCase(),
+                          },
+                        ).then(
+                          (value) =>
+                              Fluttertoast.showToast(msg: "Profile Created!")
                                   .then(
                                     (value) => Navigator.of(context).pop(),
                                   )
@@ -113,7 +147,7 @@ class CreateData extends StatelessWidget {
                                       msg: error.toString(),
                                     ),
                                   ),
-                            );
+                        );
                       }
                     },
                     child: const Text("Create Profile"),

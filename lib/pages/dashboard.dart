@@ -52,6 +52,7 @@ class _DashboardState extends State<Dashboard> {
                           onPressed: (a) {
                             String name = gotData[index]["name"];
                             String email = gotData[index]["email"];
+                            String avatar = gotData[index]["avatar"];
                             String dataIndex = gotData[index].id;
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -59,6 +60,7 @@ class _DashboardState extends State<Dashboard> {
                                   previousName: name,
                                   previousEmail: email,
                                   currentIndex: dataIndex,
+                                  previousAvatar: avatar,
                                 ),
                               ),
                             );

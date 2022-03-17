@@ -40,9 +40,9 @@ dependencies:
   flutter_slidable: ^1.2.0
   # image_picker: ^0.8.4+11
   firebase_storage: ^10.2.9
+  flutter_hooks: ^0.18.2+1
   # provider: ^6.0.2
-  # hooks_riverpod: ^1.0.3
-  # image_cropper: ^1.5.0
+  hooks_riverpod: ^1.0.3
   
 dev_dependencies:
   flutter_test:
