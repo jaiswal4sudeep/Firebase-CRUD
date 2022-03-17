@@ -1,4 +1,3 @@
-import 'package:cloud_data/model/usermodel.dart';
 import 'package:cloud_data/pages/create_data_page.dart';
 import 'package:cloud_data/pages/update_data_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,12 +13,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  UserModel userModel = UserModel();
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

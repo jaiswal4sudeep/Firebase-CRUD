@@ -28,38 +28,18 @@ class CreateData extends HookConsumerWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            Padding(
+           Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                children: <Widget>[
-                  CircleAvatar(
-                    radius: 80,
-                    child: Text(
-                      _avatar.value,
-                      style: const TextStyle(
-                        fontSize: 48,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+              child: CircleAvatar(
+                radius: 80,
+                child: Text(
+                  _avatar.value,
+                  style: const TextStyle(
+                    fontSize: 48,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Positioned(
-                    bottom: 5,
-                    right: 5,
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.blueAccent,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.camera_alt,
-                          size: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
             Form(
