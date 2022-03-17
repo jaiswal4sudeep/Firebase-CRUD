@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,7 +22,7 @@ class UpdateData extends StatelessWidget {
     _email.text = previousEmail;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update User Data'),
+        title: const Text('Update Profile'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -109,7 +111,7 @@ class UpdateData extends StatelessWidget {
                             )
                             .then(
                               (value) =>
-                                  Fluttertoast.showToast(msg: "Data Updated")
+                                  Fluttertoast.showToast(msg: "Profile Updated")
                                       .then(
                                 (value) => Navigator.of(context).pop(),
                               ),
@@ -132,7 +134,3 @@ class UpdateData extends StatelessWidget {
     );
   }
 }
-
-// void updateFields() async{
-//   await FirebaseFirestore.instance.collection("users").doc(docName).update({'name' : })
-// }

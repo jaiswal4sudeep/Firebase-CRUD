@@ -31,18 +31,18 @@ class _DashboardState extends State<Dashboard> {
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance.collection("users").snapshots(),
           builder: (builder, dataFetched) {
-            final data = dataFetched.data!.docs;
+            final gotData = dataFetched.data?.docs;
             if (dataFetched.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (data.isEmpty) {
+            } else if (gotData!.isEmpty) {
               return const Center(
-                child: Text("No Data"),
+                child: Text("No Data Available!"),
               );
             } else {
               return ListView.builder(
-                itemCount: data.length,
+                itemCount: gotData.length,
                 itemBuilder: (context, index) {
                   return Slidable(
                     startActionPane: ActionPane(
@@ -50,9 +50,9 @@ class _DashboardState extends State<Dashboard> {
                       children: <Widget>[
                         SlidableAction(
                           onPressed: (a) {
-                            String name = data[index]["name"];
-                            String email = data[index]["email"];
-                            String dataIndex = data[index].id;
+                            String name = gotData[index]["name"];
+                            String email = gotData[index]["email"];
+                            String dataIndex = gotData[index].id;
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => UpdateData(
@@ -75,7 +75,7 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         SlidableAction(
                           onPressed: (a) {
-                            daleteData('users', data[index].id);
+                            daleteData('users', gotData[index].id);
                           },
                           backgroundColor: Colors.redAccent,
                           foregroundColor: Colors.white,
@@ -87,10 +87,10 @@ class _DashboardState extends State<Dashboard> {
                     child: Card(
                       child: ListTile(
                         leading: CircleAvatar(
-                          child: Text(data[index]["avatar"] ?? "UserName"),
+                          child: Text(gotData[index]["avatar"] ?? ""),
                         ),
-                        title: Text(data[index]["name"] ?? "User E-Mail"),
-                        subtitle: Text(data[index]["email"] ?? ""),
+                        title: Text(gotData[index]["name"] ?? "NanN"),
+                        subtitle: Text(gotData[index]["email"] ?? "NaN"),
                       ),
                     ),
                   );
@@ -116,6 +116,6 @@ class _DashboardState extends State<Dashboard> {
 
 void daleteData(String users, String id) async {
   FirebaseFirestore.instance.collection(users).doc(id).delete().then(
-        (value) => Fluttertoast.showToast(msg: "Data Deleted"),
+        (value) => Fluttertoast.showToast(msg: "Profile Deleted"),
       );
 }
