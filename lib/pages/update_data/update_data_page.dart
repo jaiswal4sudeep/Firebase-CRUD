@@ -4,31 +4,44 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CreateData extends HookConsumerWidget {
-  const CreateData({Key? key}) : super(key: key);
+class UpdateData extends HookConsumerWidget {
+  final previousName;
+  final previousEmail;
+  final currentIndex;
+  final previousAvatar;
+  const UpdateData(
+      {Key? key,
+      this.previousName,
+      this.previousEmail,
+      this.currentIndex,
+      this.previousAvatar})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextEditingController _fullName = TextEditingController();
     TextEditingController _email = TextEditingController();
-    final _avatar = useState<String>("*");
+    final _avatar = useState<String>(previousAvatar);
     final _formKey = GlobalKey<FormState>();
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+    _fullName.text = previousName;
+    _email.text = previousEmail;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Profile'),
+        title: const Text('Update Profile'),
         leading: IconButton(
-          onPressed: () async {
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: const Icon(Icons.arrow_back),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-           Padding(
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
                 radius: 80,
@@ -69,7 +82,8 @@ class CreateData extends HookConsumerWidget {
                         if (value!.isEmpty) {
                           return "Username cannot be empty";
                         }
-                        _avatar.value = _fullName.text.substring(0, 1);
+                        _avatar.value =
+                            _fullName.text.substring(0, 1).toUpperCase();
                         return null;
                       },
                     ),
@@ -107,30 +121,30 @@ class CreateData extends HookConsumerWidget {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () async {
+                    onPressed: () {
+                       _fullName.text.trim();
+                      _email.text.trim();
                       if (_formKey.currentState!.validate()) {
-                        await firebaseFirestore.collection("users").add(
-                          {
-                            'name': _fullName.text,
-                            'email': _email.text,
-                            'avatar': _avatar.value.toUpperCase(),
-                          },
-                        ).then(
-                          (value) =>
-                              Fluttertoast.showToast(msg: "Profile Created!")
-                                  .then(
-                                    (value) => Navigator.of(context).pop(),
-                                  )
-                                  .onError(
-                                    (error, stackTrace) =>
-                                        Fluttertoast.showToast(
+                        FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(currentIndex)
+                            .update({
+                              'name': _fullName.text,
+                              'email': _email.text,
+                              'avatar': _avatar.value.toUpperCase(),
+                            })
+                            .then((value) =>
+                                Fluttertoast.showToast(msg: "Profile Updated")
+                                    .then(
+                                  (value) => Navigator.of(context).pop(),
+                                ))
+                            .onError(
+                                (error, stackTrace) => Fluttertoast.showToast(
                                       msg: error.toString(),
-                                    ),
-                                  ),
-                        );
+                                    ));
                       }
                     },
-                    child: const Text("Create Profile"),
+                    child: const Text("Update Profile"),
                   ),
                 ],
               ),
@@ -141,3 +155,7 @@ class CreateData extends HookConsumerWidget {
     );
   }
 }
+
+// void updateFields() async{
+//   await FirebaseFirestore.instance.collection("users").doc(docName).update({'name' : })
+// }

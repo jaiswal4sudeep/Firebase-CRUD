@@ -1,6 +1,8 @@
-import 'package:cloud_data/pages/create_data_page.dart';
-import 'package:cloud_data/pages/update_data_page.dart';
+import 'package:cloud_data/pages/create_data/create_data_page.dart';
+import 'package:cloud_data/pages/login_page/login_page.dart';
+import 'package:cloud_data/pages/update_data/update_data_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,6 +20,27 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut().then(
+                      (value) => Fluttertoast.showToast(
+                        msg: "Logged out!", // TODO: Fluttertoast Glitch Fix and Password Hide
+                      ).then(
+                        (value) => Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const Login(),
+                          ),
+                        ),
+                      ),
+                    );
+              },
+              icon: const Icon(Icons.logout),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
