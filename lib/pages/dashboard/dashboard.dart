@@ -27,7 +27,7 @@ class _DashboardState extends State<Dashboard> {
               onPressed: () {
                 FirebaseAuth.instance.signOut().then(
                       (value) => Fluttertoast.showToast(
-                        msg: "Logged out!", // TODO: Fluttertoast Glitch Fix and Password Hide
+                        msg: "Logged out!", // TODO: Fluttertoast Glitch Fix
                       ).then(
                         (value) => Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
