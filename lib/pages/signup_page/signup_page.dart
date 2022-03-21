@@ -38,14 +38,6 @@ class Signup extends HookConsumerWidget {
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.person),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            isPasswordHidden.value != isPasswordHidden.value;
-                          },
-                          icon: isPasswordHidden.value
-                              ? const Icon(Icons.visibility)
-                              : const Icon(Icons.visibility_off),
-                        ),
                         hintText: "Enter Full Name",
                         labelText: "Full Name",
                         labelStyle: TextStyle(
@@ -102,10 +94,19 @@ class Signup extends HookConsumerWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       controller: _password,
+                      obsecureText: isPasswordHidden,
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.lock),
                         hintText: "Enter password",
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            isPasswordHidden.value != isPasswordHidden.value;
+                          },
+                          icon: isPasswordHidden.value
+                              ? const Icon(Icons.visibility)
+                              : const Icon(Icons.visibility_off),
+                        ),
                         labelText: "Password",
                         labelStyle: TextStyle(
                           color: Colors.black.withOpacity(0.6),
@@ -129,9 +130,18 @@ class Signup extends HookConsumerWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       controller: _confirmPassword,
+                      obsecureText: isPasswordHidden,
                       textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            isPasswordHidden.value != isPasswordHidden.value;
+                          },
+                          icon: isPasswordHidden.value
+                              ? const Icon(Icons.visibility)
+                              : const Icon(Icons.visibility_off),
+                        ),
                         hintText: "Confirm your password",
                         labelText: "Confirm password",
                         labelStyle: TextStyle(
